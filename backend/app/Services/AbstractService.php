@@ -3,12 +3,15 @@
 namespace App\Services;
 
 use App\DTOs\PaginatedResponseDTO;
+use Illuminate\Support\Facades\Validator;
 
 abstract class AbstractService
 {
-    public function validateRequest()
+    private array $validatedData = [];
+
+    public function validateRequest(): array|bool
     {
-        // $request = request();
+        $request = request();
         $class = $this->getCallerClass();
         if (!in_array(\App\Interfaces\ServicesInterface::class, class_implements($class))) {
             throw new \App\Exceptions\InvalidServiceStructureException();
@@ -17,14 +20,25 @@ abstract class AbstractService
         $requestClass = $instance->getRequestClass();
 
         if ($requestClass) {
-            $request = app($requestClass);
-            $request->validateResolved();
+            $rules = (new $requestClass)->rules();
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return $validator->errors()->toArray();
+            }
+
+            $this->validatedData = $validator->validated();
         }
+        return true;
     }
 
     protected function getCallerClass(): string
     {
         return get_class($this);
+    }
+
+    protected function getValidatedData(): array
+    {
+        return $this->validatedData;
     }
 
     protected function formatPaginationResponse(array $data): PaginatedResponseDTO
