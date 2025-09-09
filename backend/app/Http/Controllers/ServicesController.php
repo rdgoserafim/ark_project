@@ -14,7 +14,7 @@ class ServicesController extends Controller
         /** @var \App\Services\ServiceInterface $serviceClass */
         $serviceClass = RouterService::getServiceClass($service, $method);
         if (!$serviceClass) {
-            return $this->respondNotFound("Service '$service' not found.");
+            return $this->respondNotFound("Service '{$service}' or method '{$method}' not found.");
         }
 
         $validateRequest = $serviceClass->validateRequest();

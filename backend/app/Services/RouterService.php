@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Exceptions\InvalidServiceStructureException;
+use Exception;
+use Illuminate\Support\Facades\Log;
 
 class RouterService
 {
@@ -21,13 +23,9 @@ class RouterService
                 return self::launchError('The service must implement ServicesInterface.');
             }
 
-            if (method_exists($serviceClass, $method)) {
-                try {
-                    $result = $serviceClass->$method();
-                    return $serviceClass;
-                } catch (\Exception $e) {
-                    return self::launchError('Service method error.', $e->getMessage(), 500);
-                }
+            if ( !method_exists($serviceClass, $method) ) {
+                // throw new Exception('Method ' . $method . ' does not exist in service ' . $service);
+                return null;
             }
 
             return $serviceClass;
@@ -39,7 +37,7 @@ class RouterService
     private static function launchError(string $message)
     {
         // Log the error message
-        error_log($message);
+        Log::error($message);
         throw new InvalidServiceStructureException();
         return null;
     }

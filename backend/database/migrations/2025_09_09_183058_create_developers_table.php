@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->enum('sexo', ['M', 'F', 'O', 'N/A']);
             $table->date('data_nascimento');
-            $table->string('hobby');
-            $table->timestamps()->nullable();
+            $table->string('hobby')->nullable();
+            $table->timestamps();
         });
     }
 
