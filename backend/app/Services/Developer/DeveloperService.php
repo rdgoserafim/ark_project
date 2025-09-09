@@ -4,7 +4,7 @@ namespace App\Services\Developer;
 
 use App\Interfaces\ServicesInterface;
 
-class DeveloperService extends \App\Services\AbstractService implements ServicesInterface
+class DeveloperService extends \App\Services\DomainService implements ServicesInterface
 {
     public function getDTOClass(): ?string
     {

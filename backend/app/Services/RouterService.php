@@ -8,15 +8,15 @@ use Illuminate\Support\Facades\Log;
 
 class RouterService
 {
-    public static function getServiceClass(string $service, $method): ?AbstractService
+    public static function getServiceClass(string $service, $method): ?DomainService
     {
         $serviceClassName = 'App\\Services\\' . ucfirst($service). '\\' . ucfirst($service). 'Service';
         $serviceClassName = class_exists($serviceClassName) ? $serviceClassName : null;
 
         if($serviceClassName) {
             $serviceClass = new $serviceClassName();
-            if( !$serviceClass instanceof AbstractService ) {
-                return self::launchError('The service must extend AbstractService.');
+            if( !$serviceClass instanceof DomainService ) {
+                return self::launchError('The service must extend DomainService.');
             }
 
             if( !$serviceClass instanceof \App\Interfaces\ServicesInterface ){
