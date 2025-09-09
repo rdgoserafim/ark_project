@@ -6,12 +6,20 @@ use App\DTOs\PaginatedResponseDTO;
 
 abstract class AbstractService
 {
-    // Common functionality for all services can be defined here
     public function validateRequest()
     {
         // $request = request();
-        return $this->getCallerClass();
+        $class = $this->getCallerClass();
+        if (!in_array(\App\Interfaces\ServicesInterface::class, class_implements($class))) {
+            throw new \App\Exceptions\InvalidServiceStructureException();
+        }
+        $instance = new $class();
+        $requestClass = $instance->getRequestClass();
 
+        if ($requestClass) {
+            $request = app($requestClass);
+            $request->validateResolved();
+        }
     }
 
     protected function getCallerClass(): string

@@ -2,7 +2,9 @@
 
 namespace App\Services\Level;
 
-class LevelService extends \App\Services\AbstractService implements \App\Interfaces\ServicesInterface
+use App\Interfaces\ServicesInterface;
+
+class LevelService extends \App\Services\AbstractService implements ServicesInterface
 {
     public function getDTOClass(): ?string
     {

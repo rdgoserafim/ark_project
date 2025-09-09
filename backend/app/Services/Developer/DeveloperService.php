@@ -2,7 +2,9 @@
 
 namespace App\Services\Developer;
 
-class DeveloperService extends \App\Services\AbstractService implements \App\Interfaces\ServicesInterface
+use App\Interfaces\ServicesInterface;
+
+class DeveloperService extends \App\Services\AbstractService implements ServicesInterface
 {
     public function getDTOClass(): ?string
     {
