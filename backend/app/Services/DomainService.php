@@ -22,7 +22,7 @@ abstract class DomainService extends BaseService
 
     protected function getId() : int|null
     {
-        return request()->route('id') ?? request()->segment(3) ?? ($this->getValidatedData()['id'] ?? null);
+        return request()->input('id') ?? request()->route('id') ?? request()->segment(3) ?? ($this->getValidatedData()['id'] ?? null);
     }
 
     public function index(): \Illuminate\Http\JsonResponse
@@ -51,6 +51,15 @@ abstract class DomainService extends BaseService
 
     public function store(array $validatedData = []): \Illuminate\Http\JsonResponse
     {
+        $validation = $this->validateRequest();
+        if (is_array($validation)) {
+            return response()->json([
+                'result' => 'error',
+                'message' => 'Validation failed',
+                'errors' => $validation
+            ], 422);
+        }
+
         /** @var string $modelClass */
         $modelClass = $this->getModelClass();
         
@@ -118,6 +127,24 @@ abstract class DomainService extends BaseService
 
     public function update(array $validatedData = []): \Illuminate\Http\JsonResponse
     {
+        $id = $this->getId();
+        
+        if (!$id) {
+            return response()->json([
+                'result' => 'error',
+                'message' => 'ID parameter is required'
+            ], 400);
+        }
+
+        $validation = $this->validateRequest($id);
+        if (is_array($validation)) {
+            return response()->json([
+                'result' => 'error',
+                'message' => 'Validation failed',
+                'errors' => $validation
+            ], 422);
+        }
+
         /** @var string $modelClass */
         $modelClass = $this->getModelClass();
         
@@ -127,15 +154,6 @@ abstract class DomainService extends BaseService
 
         if (!class_exists($modelClass) || !is_subclass_of($modelClass, \Illuminate\Database\Eloquent\Model::class)) {
             return $this->errorInvalidModelClass($modelClass);
-        }
-
-        $id = $this->getId();
-        
-        if (!$id) {
-            return response()->json([
-                'result' => 'error',
-                'message' => 'ID parameter is required'
-            ], 400);
         }
 
         try {
