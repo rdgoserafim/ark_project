@@ -9,7 +9,7 @@ abstract class BaseService extends AbstractService
 {
     const DEFAULT_PER_PAGE = 10;
     const DEFAULT_CURRENT_PAGE = 1;
-    const VALIDATE_METHODS = ['post', 'put', 'patch'];
+    const VALIDATE_METHODS = ['post', 'put', 'patch', 'delete'];
 
     private array $validatedData = [];
     

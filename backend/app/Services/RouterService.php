@@ -14,7 +14,10 @@ class RouterService
         $serviceClassName = class_exists($serviceClassName) ? $serviceClassName : null;
 
         if($serviceClassName) {
+            
+            /** @var DomainService $serviceClass */
             $serviceClass = new $serviceClassName();
+
             if( !$serviceClass instanceof DomainService ) {
                 return self::launchError('The service must extend DomainService.');
             }
