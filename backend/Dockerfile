@@ -36,11 +36,22 @@ RUN composer install --no-dev --no-scripts --no-autoloader
 # Gerar autoloader
 RUN composer dump-autoload --optimize
 
+# Argumentos para UID e GID do host
+ARG UID=1000
+ARG GID=1000
+
+# Criar usuário com UID/GID do host
+RUN groupadd -g $GID appuser && useradd -u $UID -g $GID -m appuser
+
+
 # Dar permissões
-RUN chown -R www-data:www-data /var/www/html/storage
-RUN chown -R www-data:www-data /var/www/html/bootstrap/cache
+RUN chown -R $UID:$GID /var/www/html/storage
+RUN chown -R $UID:$GID /var/www/html/bootstrap/cache
 RUN chmod -R 775 /var/www/html/storage
 RUN chmod -R 775 /var/www/html/bootstrap/cache
+
+# Mudar para o usuário do host
+USER appuser
 
 # Expor porta
 EXPOSE 9000

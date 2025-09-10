@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\RouterService;
-
+use Illuminate\Support\Str;
 
 class ServicesController extends Controller
 {
@@ -11,8 +11,11 @@ class ServicesController extends Controller
     
     public function __call($service, $method)
     {
+        $servicePascal = Str::pascal($service);
+        $methodCamel = $method ? Str::camel($method) : 'index';
+
         /** @var \App\Services\ServiceInterface $serviceClass */
-        $serviceClass = RouterService::getServiceClass($service, $method);
+        $serviceClass = RouterService::getServiceClass($servicePascal, $methodCamel);
         if (!$serviceClass) {
             return $this->respondNotFound("Service '{$service}' or method '{$method}' not found.");
         }
@@ -22,7 +25,7 @@ class ServicesController extends Controller
             return $this->respondWithError('Invalid request data.', $validateRequest, 400);
         }
 
-        return $serviceClass->$method( $serviceClass->getValidatedData() );
+        return $serviceClass->$methodCamel( $serviceClass->getValidatedData() );
     }
 
     protected function respondWithError($message, $details, $status = 400)

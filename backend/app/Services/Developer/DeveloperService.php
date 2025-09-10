@@ -20,4 +20,12 @@ class DeveloperService extends \App\Services\DomainService implements ServicesIn
     {
         return \App\Http\Requests\DeveloperRequest::class;
     }
+
+    public function customMethod(): \Illuminate\Http\JsonResponse
+    {
+        return response()->json([
+            'result' => 'success',
+            'message' => 'This is a custom method in DeveloperService.'
+        ]);
+    }
 }

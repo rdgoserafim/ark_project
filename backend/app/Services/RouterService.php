@@ -10,11 +10,12 @@ class RouterService
 {
     public static function getServiceClass(string $service, $method): ?DomainService
     {
-        $serviceClassName = 'App\\Services\\' . ucfirst($service). '\\' . ucfirst($service). 'Service';
+
+        $serviceClassName = 'App\\Services\\' . $service. '\\' . $service. 'Service';
         $serviceClassName = class_exists($serviceClassName) ? $serviceClassName : null;
 
         if($serviceClassName) {
-            
+
             /** @var DomainService $serviceClass */
             $serviceClass = new $serviceClassName();
 
