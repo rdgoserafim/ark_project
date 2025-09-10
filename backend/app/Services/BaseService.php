@@ -9,11 +9,11 @@ abstract class BaseService extends AbstractService
 {
     const DEFAULT_PER_PAGE = 10;
     const DEFAULT_CURRENT_PAGE = 1;
-    const VALIDATE_METHODS = ['post', 'put', 'patch', 'delete'];
+    const VALIDATE_METHODS = ['post', 'put', 'patch'];
 
     private array $validatedData = [];
     
-    public function validateRequest(): array|bool
+    public function validateRequest( ?int $id = null): array|bool
     {
         $request = request();
         $class = get_class($this);
@@ -31,6 +31,10 @@ abstract class BaseService extends AbstractService
             }
 
             $this->validatedData = $validator->validated();
+
+            if($id){
+                $this->validatedData['id'] = $id;
+            }
         }
         return true;
     }

@@ -20,6 +20,11 @@ abstract class DomainService extends BaseService
         ], 500);
     }
 
+    protected function getId() : int|null
+    {
+        return request()->route('id') ?? request()->segment(3) ?? ($this->getValidatedData()['id'] ?? null);
+    }
+
     public function index(): \Illuminate\Http\JsonResponse
     {
         /** @var string $modelClass */
@@ -83,9 +88,8 @@ abstract class DomainService extends BaseService
             return $this->errorInvalidModelClass($modelClass);
         }
 
-        // Busca o ID na URL ou nos dados validados
-        $id = request()->route('id') ?? request()->segment(3) ?? ($validatedData['id'] ?? null);
-        
+        $id = $this->getId();
+
         if (!$id) {
             return response()->json([
                 'result' => 'error',
@@ -125,8 +129,7 @@ abstract class DomainService extends BaseService
             return $this->errorInvalidModelClass($modelClass);
         }
 
-        // Busca o ID na URL ou nos dados validados
-        $id = request()->route('id') ?? request()->segment(3) ?? ($validatedData['id'] ?? null);
+        $id = $this->getId();
         
         if (!$id) {
             return response()->json([
@@ -174,8 +177,7 @@ abstract class DomainService extends BaseService
             return $this->errorInvalidModelClass($modelClass);
         }
 
-        // Busca o ID na URL ou nos dados validados
-        $id = request()->route('id') ?? request()->segment(3) ?? ($validatedData['id'] ?? null);
+        $id = $this->getId();
         
         if (!$id) {
             return response()->json([

@@ -9,7 +9,7 @@ class ServicesController extends Controller
 {
     protected array $validatedData = [];
     
-    public function __call($service, $method)
+    public function call($service, $method = null, $id = null)
     {
         $servicePascal = Str::pascal($service);
         $methodCamel = $method ? Str::camel($method) : 'index';
@@ -20,7 +20,8 @@ class ServicesController extends Controller
             return $this->respondNotFound("Service '{$service}' or method '{$method}' not found.");
         }
 
-        $validateRequest = $serviceClass->validateRequest();
+        $validateRequest = $serviceClass->validateRequest($id);
+        
         if (is_array($validateRequest)) {
             return $this->respondWithError('Invalid request data.', $validateRequest, 400);
         }
