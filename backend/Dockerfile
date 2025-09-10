@@ -47,8 +47,10 @@ RUN groupadd -g $GID appuser && useradd -u $UID -g $GID -m appuser
 # Dar permissões
 RUN chown -R $UID:$GID /var/www/html/storage
 RUN chown -R $UID:$GID /var/www/html/bootstrap/cache
+RUN chown -R $UID:$GID /var/www/html/vendor
 RUN chmod -R 775 /var/www/html/storage
 RUN chmod -R 775 /var/www/html/bootstrap/cache
+RUN chmod -R 775 /var/www/html/vendor
 
 # Mudar para o usuário do host
 USER appuser
