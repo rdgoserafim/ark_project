@@ -1,8 +1,8 @@
 import axios, { type AxiosInstance } from 'axios';
-import type { Developer } from '../../Core/Models/Developer';
-import type { DeveloperRepository } from '../../Core/Repositories/DeveloperRepository';
+import type { Level } from '../../Core/Models/Level';
+import type { LevelRepository } from '../../Core/Repositories/LevelRepository';
 
-export class HttpDeveloperRepository implements DeveloperRepository {
+export class HttpLevelRepository implements LevelRepository {
   private api: AxiosInstance;
 
   constructor(baseURL: string = '/api') {
@@ -37,27 +37,27 @@ export class HttpDeveloperRepository implements DeveloperRepository {
     );
   }
 
-  async getAll(): Promise<Developer[]> {
-    const response = await this.api.get<Developer[]>('/developer/index');
+  async getAll(): Promise<Level[]> {
+    const response = await this.api.get<Level[]>('/level/index');
     return response.data;
   }
 
-  async getById(id: number): Promise<Developer> {
-    const response = await this.api.get<Developer>(`/developer/show/${id}`);
+  async getById(id: number): Promise<Level> {
+    const response = await this.api.get<Level>(`/level/show/${id}`);
     return response.data;
   }
 
-  async create(data: Omit<Developer, 'id'>): Promise<Developer> {
-    const response = await this.api.post<Developer>('/developer/store', data);
+  async create(data: Omit<Level, 'id'>): Promise<Level> {
+    const response = await this.api.post<Level>('/level/store', data);
     return response.data;
   }
 
-  async update(id: number, data: Partial<Developer>): Promise<Developer> {
-    const response = await this.api.put<Developer>(`/developer/update/${id}`, data);
+  async update(id: number, data: Partial<Level>): Promise<Level> {
+    const response = await this.api.put<Level>(`/level/update/${id}`, data);
     return response.data;
   }
 
   async delete(id: number): Promise<void> {
-    await this.api.delete(`/developer/destroy/${id}`);
+    await this.api.delete(`/level/destroy/${id}`);
   }
 }
