@@ -41,15 +41,11 @@ abstract class DomainService extends BaseService
         try {
 
             $query = $modelClass::query();
-
-            // $data = $query->get()->map( fn($m) => $m->toArray())->toArray();
             $data = $query->get();
-
             $dto = $this->getDtoClass();
             if (!$dto || !class_exists($dto) || !method_exists($dto, 'fromModel')) {
                 return $this->formatPaginationResponse($data->toArray());
             }
-
             return $this->formatPaginationResponse($data->map(fn($item) => $dto::fromModel($item) )->toArray());
 
         } catch (\Exception $e) {
@@ -68,7 +64,7 @@ abstract class DomainService extends BaseService
                 'result' => 'error',
                 'message' => 'Validation failed',
                 'errors' => $validation
-            ], 422);
+            ], 400);
         }
 
         /** @var string $modelClass */
@@ -119,7 +115,7 @@ abstract class DomainService extends BaseService
 
         try {
             $model = $modelClass::find($id);
-            
+
             if (!$model) {
                 return response()->json([
                     'result' => 'error',
@@ -127,7 +123,12 @@ abstract class DomainService extends BaseService
                 ], 404);
             }
             
-            return response()->json($this->formatResponse($model->toArray()));
+            $dto = $this->getDtoClass();
+            if (!$dto || !class_exists($dto) || !method_exists($dto, 'fromModel')) {
+                return response()->json($this->formatResponse($model->toArray()));
+            }
+
+            return response()->json( $this->formatResponse( ( $dto::fromModel($model) )->toArray() ) );
         } catch (\Exception $e) {
             return response()->json([
                 'result' => 'error',
@@ -153,7 +154,7 @@ abstract class DomainService extends BaseService
                 'result' => 'error',
                 'message' => 'Validation failed',
                 'errors' => $validation
-            ], 422);
+            ], 400);
         }
 
         /** @var string $modelClass */
@@ -230,7 +231,7 @@ abstract class DomainService extends BaseService
             return response()->json([
                 'result' => 'success',
                 'message' => 'Resource deleted successfully'
-            ]);
+            ], 204);
         } catch (\Exception $e) {
             return response()->json([
                 'result' => 'error',

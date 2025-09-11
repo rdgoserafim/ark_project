@@ -96,7 +96,7 @@ class LevelServiceTest extends TestCase
 
         $response = $this->levelService->destroy();
 
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(204, $response->getStatusCode());
         $data = json_decode($response->getContent(), true);
         $this->assertEquals('success', $data['result']);
         $this->assertDatabaseMissing('levels', ['id' => $level->id]);
