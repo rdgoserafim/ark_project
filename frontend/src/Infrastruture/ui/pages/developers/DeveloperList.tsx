@@ -84,7 +84,13 @@ const DeveloperList: React.FC = () => {
     {
       key: 'data_nascimento',
       label: 'Data de Nascimento',
-      render: (value: string) => value ? new Date(value).toLocaleDateString('pt-BR') : '-',
+      render: (value: string) => {
+        if (!value) return '-';
+        // Extrai apenas a parte da data (YYYY-MM-DD) para evitar problemas de timezone
+        const dateOnly = value;
+        const [year, month, day] = dateOnly.split('-');
+        return new Date(parseInt(year), parseInt(month) - 1, parseInt(day)).toLocaleDateString('pt-BR');
+      },
     },
     {
       key: 'hobby',

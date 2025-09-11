@@ -39,8 +39,19 @@ abstract class DomainService extends BaseService
         }
 
         try {
-            $data = $modelClass::all()->toArray();
-            return $this->formatPaginationResponse($data);
+
+            $query = $modelClass::query();
+
+            // $data = $query->get()->map( fn($m) => $m->toArray())->toArray();
+            $data = $query->get();
+
+            $dto = $this->getDtoClass();
+            if (!$dto || !class_exists($dto) || !method_exists($dto, 'fromModel')) {
+                return $this->formatPaginationResponse($data->toArray());
+            }
+
+            return $this->formatPaginationResponse($data->map(fn($item) => $dto::fromModel($item) )->toArray());
+
         } catch (\Exception $e) {
             return response()->json([
                 'result' => 'error',

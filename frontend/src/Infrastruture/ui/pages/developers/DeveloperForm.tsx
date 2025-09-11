@@ -47,7 +47,8 @@ const DeveloperForm: React.FC<DeveloperFormProps> = ({ developer, onSubmit, onCa
       setFormData({
         name: developer.name,
         sexo: developer.sexo,
-        data_nascimento: developer.data_nascimento,
+        // Extrai apenas a parte da data (YYYY-MM-DD) para o input type="date"
+        data_nascimento: developer.data_nascimento ? developer.data_nascimento : '',
         hobby: developer.hobby,
         level_id: developer.level_id.toString(),
       });
