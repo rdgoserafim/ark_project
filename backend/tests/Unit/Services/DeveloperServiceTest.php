@@ -108,7 +108,7 @@ class DeveloperServiceTest extends TestCase
 
         $response = $this->developerService->destroy();
 
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(204, $response->getStatusCode());
         $data = json_decode($response->getContent(), true);
         $this->assertEquals('success', $data['result']);
         $this->assertDatabaseMissing('developers', ['id' => $developer->id]);
@@ -118,7 +118,7 @@ class DeveloperServiceTest extends TestCase
     {
         $response = $this->developerService->customMethod();
 
-        $this->assertEquals(204, $response->getStatusCode());
+        $this->assertEquals(200, $response->getStatusCode());
         $data = json_decode($response->getContent(), true);
         $this->assertEquals('success', $data['result']);
         $this->assertEquals('This is a custom method in DeveloperService.', $data['message']);
