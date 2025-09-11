@@ -31,66 +31,87 @@ Aplicar alta complexidade de arquitetura em um aplicativo web, com backend em La
    cd ark_project
    ```
 
-2. Navegue para o diretório do backend:
+2. Copie o arquivo de configuração de ambiente do backend:
    ```bash
-   cd backend
+   cp backend/.env.example backend/.env
    ```
 
-3. Instale as dependências do PHP (via Composer):
+3. Suba a aplicação usando Docker Compose:
    ```bash
-   composer install
+   docker compose up --build -d
    ```
 
-4. Copie o arquivo de configuração de ambiente:
+4. Execute os comandos de configuração inicial dentro do container do backend:
    ```bash
-   cp .env.example .env
+   # Instalar dependências do PHP
+   docker compose exec backend composer install
+   
+   # Gerar chave da aplicação
+   docker compose exec backend php artisan key:generate
+   
+   # Executar migrações do banco de dados
+   docker compose exec backend php artisan migrate
+   
+   # (Opcional) Executar seeders para popular o banco com dados de exemplo
+   docker compose exec backend php artisan db:seed
    ```
 
-5. Gere a chave da aplicação:
-   ```bash
-   php artisan key:generate
-   ```
+## Como Usar a Aplicação
 
-6. Execute as migrações do banco de dados:
-   ```bash
-   php artisan migrate
-   ```
+Após a instalação, a aplicação estará disponível através dos seguintes endpoints:
 
-## Subindo a Aplicação
+- **Frontend (React)**: `http://localhost:3000`
+- **Backend API (Laravel)**: `http://localhost:8001`
+- **Nginx (Proxy)**: `http://localhost` (porta 80)
 
-Para subir a aplicação usando Docker Compose, execute o comando a partir da raiz do projeto:
-
-```bash
-docker compose up --build -d
-```
-
-Isso irá:
+O Docker Compose irá:
 - Construir e iniciar os containers do backend (Laravel), frontend (React) e Nginx
 - Configurar a rede entre os serviços
-- Expor as portas necessárias (geralmente 8000 para backend, 3000 para frontend, 80 para Nginx)
+- Instalar automaticamente as dependências do frontend (npm)
+- Expor as portas necessárias para cada serviço
 
-Acesse a aplicação em `http://localhost:3000` (através do Nginx).
+**Recomendação**: Acesse a aplicação através do Nginx em `http://localhost` para uma experiência completa.
+
 
 ## Executando os Testes
 
-Para executar os testes automatizados:
+Para executar os testes automatizados, use os comandos dentro do container do backend:
 
-1. Navegue para o diretório do backend:
-   ```bash
-   cd backend
-   ```
-
-2. Execute o PHPUnit:
-   ```bash
-   ./vendor/bin/phpunit
-   ```
-
-Ou, se preferir usar o comando do Artisan:
 ```bash
-php artisan test
+# Executar todos os testes
+docker compose exec backend php artisan test
+
+# Ou usando PHPUnit diretamente
+docker compose exec backend ./vendor/bin/phpunit
+
+# Executar testes com relatório de cobertura (se configurado)
+docker compose exec backend php artisan test --coverage
 ```
 
-Os testes estão localizados em `tests/Feature/` e `tests/Unit/`.
+Os testes estão localizados em `tests/Unit/Services` e `tests/Feature`.
+
+### Comandos Úteis para Desenvolvimento
+
+Durante o desenvolvimento, você pode usar os seguintes comandos para interagir com a aplicação:
+
+```bash
+# Acessar o shell do container do backend
+docker compose exec backend bash
+
+# Executar comandos Artisan
+docker compose exec backend php artisan [comando]
+
+# Ver logs da aplicação
+docker compose logs backend
+docker compose logs frontend
+docker compose logs nginx
+
+# Parar a aplicação
+docker compose down
+
+# Rebuild completo (útil após mudanças no Dockerfile)
+docker compose down && docker compose up --build -d
+```
 
 ## Arquitetura do Backend
 
