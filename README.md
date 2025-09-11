@@ -113,6 +113,47 @@ O backend segue uma arquitetura baseada em Laravel com padrões de design para a
 
 Essa arquitetura permite fácil manutenção, testes e expansão do sistema.
 
+## Arquitetura do Frontend
+
+O frontend segue uma arquitetura baseada em React com TypeScript e padrões de design para alta escalabilidade e manutenibilidade:
+
+### Estrutura Principal
+- **Components**: Componentes React reutilizáveis organizados por funcionalidade
+- **Core**: Camada central contendo:
+  - **Models**: Definições de tipos e interfaces TypeScript
+  - **Repositories**: Camada de abstração para acesso a dados
+  - **Services**: Lógica de negócio do frontend
+- **Infrastructure**: Camada de infraestrutura contendo:
+  - **API**: Configurações e clients para comunicação com backend
+  - **Storage**: Gerenciamento de estado e armazenamento local
+  - **UI**: Componentes de interface e design system
+- **Assets**: Recursos estáticos como imagens, ícones e fontes
+
+### Tecnologias e Ferramentas
+- **React 19**: Framework principal para construção da interface
+- **TypeScript**: Tipagem estática para maior segurança e produtividade
+- **Vite**: Build tool moderno e rápido para desenvolvimento
+- **Tailwind CSS**: Framework CSS utility-first para estilização
+- **React Router DOM**: Roteamento SPA (Single Page Application)
+- **Axios**: Cliente HTTP para comunicação com APIs
+- **ESLint**: Linting e padronização de código
+
+### Padrões Aplicados
+- **Component-Based Architecture**: Componentização e reutilização
+- **Repository Pattern**: Abstração da camada de dados
+- **Service Layer**: Separação da lógica de negócio
+- **TypeScript Interfaces**: Contratos e tipagem forte
+- **Clean Architecture**: Separação de responsabilidades em camadas
+- **Responsive Design**: Interface adaptável a diferentes dispositivos
+
+### Scripts Disponíveis
+- `npm run dev`: Inicia o servidor de desenvolvimento
+- `npm run build`: Compila a aplicação para produção
+- `npm run lint`: Executa verificação de código com ESLint
+- `npm run preview`: Visualiza a build de produção
+
+Essa arquitetura garante código limpo, testável e facilmente extensível.
+
 ## Contribuição
 Contribuições são bem-vindas! Siga os padrões do projeto e abra uma issue ou pull request no repositório.
 
